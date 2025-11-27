@@ -3,41 +3,44 @@ import { GoogleGenAI } from "@google/genai";
 let ai: GoogleGenAI | null = null;
 
 try {
+  // Ensure we use the environment variable as per instructions
   ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 } catch (error) {
   console.error("Failed to initialize GoogleGenAI. Make sure API_KEY is set.", error);
 }
 
 const SYSTEM_INSTRUCTION = `
-You are the "Head Virtual Barista" at Siphon Coffee. 
-Your goal is to help customers choose drinks and food from our menu based on their mood, weather, or taste preferences.
-We specialize in the Siphon brewing method (halogen burners), which produces a tea-like, vibrant, and aromatic cup of coffee.
+You are the "Head Barista" at Siphon Coffee in Houston, Texas.
+Your persona is knowledgeable, warm, slightly scientific (due to our brewing methods), and passionate about coffee.
 
-Our Key Menu Items to suggest:
-- Siphon Coffee (The signature experience, $8)
-- Honey Lavender Latte (Sweet and floral, $6)
-- The "Siphon" Toast (Avocado, poached egg, chili flakes, $12)
-- Breakfast Tacos (Chorizo or Potato, $4.50)
-- Cold Brew (Nitrogen infused, $5)
-- Craft Beer & Wine selection (for later in the day)
+About Siphon Coffee:
+- We are famous for our "Siphon" (Vacuum Pot) brewing method using Halogen beam heaters.
+- The Siphon method produces a very clean, tea-like, aromatic cup with no sediment.
+- We also serve espresso, cold brew (Kyoto style slow drip), beer, and wine.
+- We have a full food menu (Siphon Toast, Tacos, Quiche).
 
-Tone: Warm, knowledgeable, hipster-chic, but approachable. Keep responses concise (under 50 words) unless asked for a detailed explanation of the Siphon method.
+Your Goal:
+- Help customers decide what to order based on their preferences (e.g., "I want something sweet", "I need energy", "I'm hungry").
+- If asked about the Siphon method, explain it simply: "It uses vapor pressure and vacuum force to fully immerse the coffee, creating a vibrant and clean flavor profile."
+- Keep responses concise (under 50 words) unless explaining a complex topic.
+- Suggest "The Siphon Signature" to new guests.
+
+Menu Highlights to Recommend:
+- Siphon Signature ($8)
+- Honey Lavender Latte ($6)
+- Kyoto Cold Brew ($6.50)
+- The Siphon Toast ($12)
 `;
 
 export const sendMessageToBarista = async (history: { role: string; parts: { text: string }[] }[], newMessage: string): Promise<string> => {
   if (!ai) {
-    return "I'm currently having trouble connecting to the coffee mind hive. Please check your API key.";
+    return "I'm currently having trouble connecting to the coffee mind hive. Please check your connection.";
   }
 
   try {
     const model = 'gemini-2.5-flash';
     
-    // Construct the chat history for the API
-    // Note: The SDK manages history in the chat session, but since we might recreate the session 
-    // or need statelessness in some architectures, we'll initialize a new chat with history here for simplicity in this demo context,
-    // or use the chat object if we persisted it. 
-    // For this implementation, we will use a fresh chat with history injected to keep it robust.
-
+    // Create a new chat session with the provided history
     const chat = ai.chats.create({
       model: model,
       config: {
@@ -55,6 +58,6 @@ export const sendMessageToBarista = async (history: { role: string; parts: { tex
 
   } catch (error) {
     console.error("Error talking to Barista:", error);
-    return "I spilled the beans! Something went wrong. Please try again.";
+    return "I spilled the beans! Something went wrong. Please try again in a moment.";
   }
 };

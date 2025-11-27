@@ -14,7 +14,7 @@ const App: React.FC = () => {
   // Handle scroll effect for navbar
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -27,52 +27,49 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-stone-950 flex flex-col">
+    <div className="min-h-screen bg-coffee-950 flex flex-col text-stone-200">
       {/* Navigation */}
       <nav 
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          scrolled || currentPage !== Page.HOME 
-            ? 'bg-stone-950/90 backdrop-blur-md border-b border-stone-800 py-4 shadow-lg' 
-            : 'bg-transparent py-6'
+        className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${
+          scrolled 
+            ? 'bg-coffee-950/95 backdrop-blur-md border-coffee-800 py-4 shadow-lg' 
+            : 'bg-transparent border-transparent py-6'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
           {/* Logo */}
           <button 
             onClick={() => navigate(Page.HOME)}
-            className="text-2xl font-serif font-bold tracking-tighter text-white hover:text-amber-500 transition-colors"
+            className="text-2xl font-serif font-bold tracking-tighter text-white hover:text-amber-600 transition-colors z-50"
           >
             SIPHON
           </button>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8">
-            <button 
-              onClick={() => navigate(Page.HOME)} 
-              className={`text-sm uppercase tracking-widest hover:text-amber-500 transition-colors ${currentPage === Page.HOME ? 'text-amber-500' : 'text-stone-300'}`}
-            >
-              Home
-            </button>
-            <button 
-              onClick={() => navigate(Page.MENU)} 
-              className={`text-sm uppercase tracking-widest hover:text-amber-500 transition-colors ${currentPage === Page.MENU ? 'text-amber-500' : 'text-stone-300'}`}
-            >
-              Menu
-            </button>
-            <button 
-              onClick={() => navigate(Page.ABOUT)} 
-              className={`text-sm uppercase tracking-widest hover:text-amber-500 transition-colors ${currentPage === Page.ABOUT ? 'text-amber-500' : 'text-stone-300'}`}
-            >
-              About & Location
-            </button>
-            <button className="px-5 py-2 border border-amber-600 text-amber-500 text-sm uppercase tracking-wider hover:bg-amber-600 hover:text-white transition-all">
+          <div className="hidden md:flex items-center gap-10">
+            {[
+                { label: 'Home', page: Page.HOME },
+                { label: 'Menu', page: Page.MENU },
+                { label: 'Story & Location', page: Page.ABOUT }
+            ].map(item => (
+                <button 
+                  key={item.label}
+                  onClick={() => navigate(item.page)} 
+                  className={`text-xs font-medium uppercase tracking-[0.2em] hover:text-amber-500 transition-colors relative group ${currentPage === item.page ? 'text-amber-500' : 'text-stone-300'}`}
+                >
+                  {item.label}
+                  <span className={`absolute -bottom-2 left-0 w-full h-[2px] bg-amber-600 transform scale-x-0 transition-transform duration-300 ${currentPage === item.page ? 'scale-x-100' : 'group-hover:scale-x-50'}`}></span>
+                </button>
+            ))}
+            
+            <button className="px-6 py-2 border border-amber-700 text-amber-500 text-xs font-bold uppercase tracking-widest hover:bg-amber-700 hover:text-white transition-all duration-300">
               Order Online
             </button>
           </div>
 
           {/* Mobile Toggle */}
           <button 
-            className="md:hidden text-white"
+            className="md:hidden text-white z-50 hover:text-amber-500 transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={28} /> : <MenuIcon size={28} />}
@@ -80,14 +77,12 @@ const App: React.FC = () => {
         </div>
 
         {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-stone-900 border-b border-stone-800 md:hidden flex flex-col p-6 space-y-4 shadow-2xl animate-fade-in-down">
-             <button onClick={() => navigate(Page.HOME)} className="text-left text-stone-200 py-2 border-b border-stone-800">Home</button>
-             <button onClick={() => navigate(Page.MENU)} className="text-left text-stone-200 py-2 border-b border-stone-800">Menu</button>
-             <button onClick={() => navigate(Page.ABOUT)} className="text-left text-stone-200 py-2 border-b border-stone-800">About & Location</button>
-             <button className="text-center bg-amber-600 text-white py-3 mt-4 rounded-sm">Order Online</button>
-          </div>
-        )}
+        <div className={`fixed inset-0 bg-coffee-950 z-40 flex flex-col items-center justify-center space-y-8 transition-transform duration-500 md:hidden ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+             <button onClick={() => navigate(Page.HOME)} className="text-3xl font-serif text-white hover:text-amber-500 transition-colors">Home</button>
+             <button onClick={() => navigate(Page.MENU)} className="text-3xl font-serif text-white hover:text-amber-500 transition-colors">Menu</button>
+             <button onClick={() => navigate(Page.ABOUT)} className="text-3xl font-serif text-white hover:text-amber-500 transition-colors">About</button>
+             <button className="px-8 py-4 bg-amber-700 text-white text-lg uppercase tracking-widest mt-8">Order Online</button>
+        </div>
       </nav>
 
       {/* Main Content */}
@@ -98,21 +93,21 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-stone-900 border-t border-stone-800 py-12 px-6">
+      <footer className="bg-coffee-950 border-t border-coffee-800 py-16 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left">
-            <h4 className="text-2xl font-serif font-bold text-white mb-2">SIPHON COFFEE</h4>
-            <p className="text-stone-500 text-sm">Brewing science, crafting art.</p>
+            <h4 className="text-3xl font-serif font-bold text-white mb-2 tracking-tighter">SIPHON</h4>
+            <p className="text-stone-600 text-xs tracking-widest uppercase">Precision Brewing • Houston, TX</p>
           </div>
           
-          <div className="flex gap-6">
-            <a href="#" className="text-stone-400 hover:text-amber-500 transition-colors"><Instagram size={20} /></a>
-            <a href="#" className="text-stone-400 hover:text-amber-500 transition-colors"><Facebook size={20} /></a>
-            <a href="#" className="text-stone-400 hover:text-amber-500 transition-colors"><Twitter size={20} /></a>
+          <div className="flex gap-8">
+            <a href="#" className="text-stone-500 hover:text-white transition-colors hover:-translate-y-1 transform duration-300"><Instagram size={20} /></a>
+            <a href="#" className="text-stone-500 hover:text-white transition-colors hover:-translate-y-1 transform duration-300"><Facebook size={20} /></a>
+            <a href="#" className="text-stone-500 hover:text-white transition-colors hover:-translate-y-1 transform duration-300"><Twitter size={20} /></a>
           </div>
 
-          <div className="text-stone-500 text-sm">
-            &copy; {new Date().getFullYear()} Siphon Coffee. All rights reserved.
+          <div className="text-stone-600 text-xs">
+            &copy; {new Date().getFullYear()} Siphon Coffee.
           </div>
         </div>
       </footer>

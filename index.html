@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -18,36 +18,47 @@
             },
             colors: {
               coffee: {
-                900: '#2C1810',
-                800: '#3D2216',
-                700: '#543021',
-                600: '#6F4131',
-                500: '#8C5743',
-                100: '#F5E6E0',
+                950: '#0C0A09', // Deepest black/brown
+                900: '#1C1917', // Rich dark stone
+                800: '#292524',
+                700: '#44403C',
+                600: '#57534E',
+                500: '#78716C',
+                100: '#F5F5F4',
               },
               amber: {
                 400: '#FBBF24',
                 500: '#F59E0B',
+                600: '#D97706',
+                700: '#B45309',
+                900: '#78350F',
               }
+            },
+            backgroundImage: {
+              'grain': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E\")",
             }
           }
         }
       }
     </script>
     <style>
-      /* Custom scrollbar for webkit */
+      /* Custom scrollbar */
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #1c1917; 
+        background: #0C0A09; 
       }
       ::-webkit-scrollbar-thumb {
         background: #44403c; 
-        border-radius: 4px;
+        border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #57534e; 
+        background: #D97706; 
+      }
+      
+      .text-glow {
+        text-shadow: 0 0 20px rgba(217, 119, 6, 0.3);
       }
     </style>
   <script type="importmap">
@@ -56,13 +67,14 @@
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.0/client",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
     "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
   }
 }
 </script>
 </head>
-  <body class="bg-stone-950 text-stone-200 font-sans antialiased selection:bg-amber-500 selection:text-white">
+  <body class="bg-coffee-950 text-stone-200 font-sans antialiased selection:bg-amber-600 selection:text-white bg-grain">
     <div id="root"></div>
   </body>
 </html>
